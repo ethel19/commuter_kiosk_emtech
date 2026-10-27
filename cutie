@@ -1,0 +1,73 @@
+# app.py
+
+
+class CashMachine:
+
+  def __init__(self, initial_balance: float = 5000.0):
+    self.balance = initial_balance
+
+  def calculate_coin_exchange(
+      self, bill_amount: float, service_fee_rate: float = 0.0
+  ):
+    fee = bill_amount * service_fee_rate
+    net_amount = bill_amount - fee
+    return {"net_amount": net_amount, "fee": fee}
+
+
+class PhilippineFareCalculator:
+
+  def compute_fare(
+      self, distance_km: float, vehicle_type: str, is_discounted: bool = False
+  ):
+    # Example logic reflecting LTFRB distance-add-on frameworks
+    base_fare = 13.00  # Example base fare for first 5km
+    succeeding_rate = 2.25  # Example per km rate
+
+    if distance_km <= 5:
+      fare = base_fare
+    else:
+      fare = base_fare + ((distance_km - 5) * succeeding_rate)
+
+    if is_discounted:
+      fare *= 0.80  # 20% discount for students/seniors/PWDs
+
+    return round(fare, 2)
+
+
+def check_route_conditions(origin: str, destination: str):
+  # Placeholder for live Traffic API & Flood monitoring integration
+  traffic_status = "Moderate Congestion"
+  flood_alert = "Normal (Passable)"
+  return {"traffic": traffic_status, "flood": flood_alert}
+
+
+if __name__ == "__main__":
+  print("--- Starting Smart Transit Kiosk Simulation ---")
+
+  # 1. Test Cash Machine & Bill Exchanging
+  machine = CashMachine(initial_balance=5000.0)
+  exchange_result = machine.calculate_coin_exchange(
+      100.0, service_fee_rate=0.02
+  )
+  print(f"\n[Cash Machine]")
+  print(f"Exchanging PHP 100.00 with a 2% service fee:")
+  print(f"  - Fee Collected: PHP {exchange_result['fee']:.2f}")
+  print(f"  - Net Amount to Dispense: PHP {exchange_result['net_amount']:.2f}")
+
+  # 2. Test Philippine Fare Calculation (LTFRB Rules)
+  fare_calc = PhilippineFareCalculator()
+  distance = 8.5  # kilometers
+  regular_fare = fare_calc.compute_fare(distance, "traditional_jeepney")
+  discounted_fare = fare_calc.compute_fare(
+      distance, "traditional_jeepney", is_discounted=True
+  )
+
+  print(f"\n[Fare Calculator ({distance} km trip)]")
+  print(f"  - Regular Fare: PHP {regular_fare}")
+  print(f"  - Discounted Fare (Student/Senior/PWD): PHP {discounted_fare}")
+
+  # 3. Test Traffic and Flood Conditions
+  route_status = check_route_conditions("Cubao, QC", "Recto, Manila")
+  print(f"\n[Route Monitor]")
+  print(f"  - Traffic Status: {route_status['traffic']}")
+  print(f"  - Flood Alert: {route_status['flood']}")
